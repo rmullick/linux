@@ -131,7 +131,7 @@ static int bld_get_cpu(struct task_struct *p, int sd_flags, int wake_flags)
 {
 	unsigned int cpu;
 
-	if (sd_flags == SD_BALANCE_WAKE || (sd_flags == SD_BALANCE_EXEC && (p->mm && atomic_read(&p->mm->mm_users) > 1)))
+	if (sd_flags == SD_BALANCE_WAKE || (sd_flags == SD_BALANCE_EXEC && (get_nr_threads(p) > 1)))
 		cpu = bld_pick_cpu_domain(p, sd_flags, wake_flags);
 	else {
 		if (rt_task(p))
