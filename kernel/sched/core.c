@@ -767,7 +767,8 @@ static void enqueue_task(struct rq *rq, struct task_struct *p, int flags)
 	update_rq_clock(rq);
 	sched_info_queued(rq, p);
 	p->sched_class->enqueue_task(rq, p, flags);
-	bld_track_load_activate(rq, p);
+	if (!dl_task(p))
+		bld_track_load_activate(rq, p);
 }
 
 static void dequeue_task(struct rq *rq, struct task_struct *p, int flags)
@@ -775,7 +776,8 @@ static void dequeue_task(struct rq *rq, struct task_struct *p, int flags)
 	update_rq_clock(rq);
 	sched_info_dequeued(rq, p);
 	p->sched_class->dequeue_task(rq, p, flags);
-	bld_track_load_deactivate(rq, p);
+	if (!dl_task(p))
+		bld_track_load_deactivate(rq, p);
 }
 
 void activate_task(struct rq *rq, struct task_struct *p, int flags)
