@@ -5,11 +5,6 @@ static LIST_HEAD(rt_rq_head);
 static LIST_HEAD(cfs_rq_head);
 static DEFINE_RWLOCK(cfs_list_lock);
 #ifdef	CONFIG_FAIR_GROUP_SCHED
-static inline struct rq *rq_of_rt(struct rt_rq *rt_rq)
-{
-	return rt_rq->rq;
-}
-
 static inline struct rq *rq_of_cfs(struct cfs_rq *cfs_rq)
 {
 	return cfs_rq->rq;
@@ -19,7 +14,14 @@ static inline struct rq *rq_of_cfs(struct cfs_rq *cfs_rq)
 {
 	return container_of(cfs_rq, struct rq, cfs);
 }
+#endif
 
+#ifdef	CONFIG_RT_GROUP_SCHED
+static inline struct rq *rq_of_rt(struct rt_rq *rt_rq)
+{
+	return rt_rq->rq;
+}
+#else
 static inline struct rq *rq_of_rt(struct rt_rq *rt_rq)
 {
 	return container_of(rt_rq, struct rq, rt);
