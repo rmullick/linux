@@ -4,7 +4,7 @@ static DEFINE_RWLOCK(rt_list_lock);
 static LIST_HEAD(rt_rq_head);
 static LIST_HEAD(cfs_rq_head);
 static DEFINE_RWLOCK(cfs_list_lock);
-
+#ifdef	CONFIG_FAIR_GROUP_SCHED
 static inline struct rq *rq_of_rt(struct rt_rq *rt_rq)
 {
 	return rt_rq->rq;
@@ -14,6 +14,17 @@ static inline struct rq *rq_of_cfs(struct cfs_rq *cfs_rq)
 {
 	return cfs_rq->rq;
 }
+#else
+static inline struct rq *rq_of_cfs(struct cfs_rq *cfs_rq)
+{
+	return container_of(cfs_rq, struct rq, cfs);
+}
+
+static inline struct rq *rq_of_rt(struct rt_rq *rt_rq)
+{
+	return container_of(rt_rq, struct rq, rt);
+}
+#endif
 
 static int select_cpu_for_wakeup(int task_type, struct cpumask *mask)
 {
