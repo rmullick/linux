@@ -132,7 +132,7 @@ static void track_load_rt(struct rq *rq, struct task_struct *p)
 	if (firstbit <= rq->rt.lowbit)
 		rq->rt.lowbit = p->prio;
 
-	if (rq->rt.lowbit > first->lowbit) {
+	if (rq->rt.lowbit < first->lowbit) {
 		write_lock_irqsave(&rt_list_lock, flag);
 		list_del(&rq->rt.bld_rt_list);
 		list_add_tail(&rq->rt.bld_rt_list, &rt_rq_head);
